@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1011267551240",
+    "project_id": "drtmodetest",
+    "storage_bucket": "drtmodetest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1011267551240:android:3e6dc2e8f45d1f71d951bd",
+        "android_client_info": {
+          "package_name": "com.example.dert"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClNTmxbxUvW9XciZh4-lcQmgZgOKxBLsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1011267551240:android:841fab7ae908f6b8d951bd",
+        "android_client_info": {
+          "package_name": "com.example.diarraapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClNTmxbxUvW9XciZh4-lcQmgZgOKxBLsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
