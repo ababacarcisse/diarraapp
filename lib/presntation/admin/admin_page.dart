@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../data/providers/auth_notification.dart';
 import 'CreateProductPage.dart';
 import 'DashboardPage.dart';
 import 'commandPage.dart';
 import 'createCategoryPage.dart';
+
+import 'package:go_router/go_router.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -13,25 +17,26 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
+  @override
+  Widget build(BuildContext context,) {
 
 
-  int activePageIndex = 0; // Index de la page active
-  List<Widget> page = [
-  const DashboardPage(),
-  const CreateCategoryPage(),
-  const CreateProductPage(),
-  const CommandPage(),
+    int activePageIndex = 0; // Index de la page active
+    List<Widget> page = [
+      const DashboardPage(),
+      const CreateCategoryPage(),
+      const CreateProductPage(),
+      const CommandPage(),
+      // NewletterPage(),
+    ];
 
- // NewletterPage(),
-];
-  List<String> sectionNames = [
-    'Tableau de bord',
-    'Créer une Catégorie',
-        'Créer un produit',
-    'Commandes'
-  ];
- @override
-  Widget build(BuildContext context) {
+    List<String> sectionNames = [
+      'Tableau de bord',
+      'Créer une Catégorie',
+      'Créer un produit',
+      'Commandes',
+    ];
+
     return Scaffold(
       appBar: AppBar(title: const Text("Page d'administration")),
       drawer: AdminDrawer(
@@ -46,7 +51,6 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 }
-
 class AdminDrawer extends StatelessWidget {
   final List<String> sectionNames;
   final Function(int) onSectionChanged;
@@ -59,8 +63,7 @@ class AdminDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-   return Drawer(
+    return Drawer(
       child: ListView(
         children: <Widget>[
           const DrawerHeader(
@@ -77,14 +80,17 @@ class AdminDrawer extends StatelessWidget {
           ),
           for (int i = 0; i < sectionNames.length; i++)
             buildDrawerItem(sectionNames[i], i),
-          ListTile(
-            title: const Text("Déconnexion"),
-            leading: const Icon(
-              Icons.logout,
-              color: Colors.red,
-            ),
-            onTap: () {
-              // Gérez la déconnexion ici
+          Consumer(
+            builder: (context, ref, child) {
+              return ListTile(
+                title: const Text("Déconnexion"),
+                leading: const Icon(
+                  Icons.logout,
+                  color: Colors.red,
+                ),
+                onTap: () {
+                                },
+              );
             },
           ),
         ],
@@ -105,5 +111,4 @@ class AdminDrawer extends StatelessWidget {
       },
     );
   }
-  
 }

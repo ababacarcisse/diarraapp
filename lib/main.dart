@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
     ),
     GoRoute(
       path: '/admin/login',
-      builder: (context, state) => const LoginPage(),
+      builder: (context, state) => const AdminLoginPage(),
     ),
        GoRoute(
       path: '/adminPage',
