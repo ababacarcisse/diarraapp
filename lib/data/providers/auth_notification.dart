@@ -28,8 +28,8 @@ class AuthNotifier extends StateNotifier<bool> {
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../services/auth_service.dart';
 final authNotifierProvider = StateNotifierProvider<AuthNotifier, bool>(
@@ -56,28 +56,29 @@ login({required String email, required String password, required BuildContext co
     final errorMessage = "Erreur d'authentification : $e"; // Créez un message d'erreur significatif.
     
 
-    print(errorMessage);
     return ErreurMessagetoLogin(_errorStreamController, errorMessage);
   }
 }
 
 Future<void> logout(BuildContext context) async {
     await _authService.signOut();
+    // ignore: use_build_context_synchronously
     context.go("/admin/login");
     state = false;
   }
 }
-ErreurMessagetoLogin(final StreamController<String> _errorStreamController ,final errorMessage) {
+// ignore: non_constant_identifier_names
+ErreurMessagetoLogin(final StreamController<String> errorStreamController ,final errorMessage) {
      if (errorMessage == "[firebase_auth/invalid-email] The email address is badly formatted.") {
       const message = "L'adresse email est mal écrite";
-      _errorStreamController.add(message);
+      errorStreamController.add(message);
     } else if (errorMessage == "[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.") {
       const message = "L'utilisateur n'existe pas";
-      _errorStreamController.add(message);
+      errorStreamController.add(message);
     } else if (errorMessage == "[firebase_auth/wrong-password] The password is invalid or the user does not have a password.") {
       const message = "Le mot de passe est invalide ou l'utilisateur n'a pas le droit de se connecter à cette application";
-      _errorStreamController.add(message);
+      errorStreamController.add(message);
     } else {
-      _errorStreamController.add(errorMessage); // Gère toutes les autres erreurs.
+      errorStreamController.add(errorMessage); // Gère toutes les autres erreurs.
     }
 }

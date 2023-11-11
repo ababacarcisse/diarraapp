@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../data/providers/auth_notification.dart';
 
@@ -14,15 +13,8 @@ class AdminLoginPage extends StatefulWidget {
 class _AdminLoginPageState extends State<AdminLoginPage> {
   @override
   Widget build(BuildContext context) {
-    final router = GoRouter.of(context);
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-    @override
-    void dispose() {
-      emailController.dispose();
-      passwordController.dispose();
-      super.dispose();
-    }
 
     return Scaffold(
       body: Center(
@@ -86,7 +78,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                             style: const TextStyle(color: Colors.red),
                           );
                         } else {
-                          return SizedBox(); // Ou un widget vide si pas d'erreur.
+                          return const SizedBox(); // Ou un widget vide si pas d'erreur.
                         }
                       },
                     ),

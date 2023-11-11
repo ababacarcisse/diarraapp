@@ -1,43 +1,64 @@
+
+// Importez également 'NewletterPage' si vous en avez besoin.
+
+import 'package:diarraapp/presntation/admin/addProductPage.dart';
+import 'package:diarraapp/presntation/admin/add_category_page.dart';
+import 'package:diarraapp/presntation/admin/commandPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../data/providers/auth_notification.dart';
-import 'CreateProductPage.dart';
-import 'DashboardPage.dart';
-import 'commandPage.dart';
-import 'createCategoryPage.dart';
-
 import 'package:go_router/go_router.dart';
+
+import 'DashboardPage.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AdminPageState createState() => _AdminPageState();
 }
 
 class _AdminPageState extends State<AdminPage> {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
-  Widget build(BuildContext context,) {
+  void initState() {
+    super.initState();
 
+    final User? user = _auth.currentUser;
 
-    int activePageIndex = 0; // Index de la page active
-    List<Widget> page = [
-      const DashboardPage(),
-      const CreateCategoryPage(),
-      const CreateProductPage(),
-      const CommandPage(),
-      // NewletterPage(),
-    ];
-
-    List<String> sectionNames = [
-      'Tableau de bord',
-      'Créer une Catégorie',
-      'Créer un produit',
-      'Commandes',
-    ];
-
+    if (user == null) {
+      context.go('/admin/login');
+    }
+  }
+  int activePageIndex = 0; // Index de la page active
+  List<Widget> page = [
+  const DashboardPage(),
+  const AddProductPage(),
+   const AddCategoryPage(),
+  const CommandPage(),
+ // NewletterPage(),
+];
+  List<String> sectionNames = [
+    'Tableau de bord',
+    'Ajouter un Produit',
+    'Ajoutez une Catégorie',
+    'Commandes',
+   
+    // Ajoutez 'Newsletter' si nécessaire
+  ];
+void _signOut() async {
+  try {
+    await _auth.signOut();
+    // ignore: use_build_context_synchronously
+    context.go('/');
+  } catch (e) {
+    print("Erreur de déconnexion : $e");  }
+}
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(title: const Text("Page d'administration")),
       drawer: AdminDrawer(
         sectionNames: sectionNames,
@@ -51,6 +72,7 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 }
+
 class AdminDrawer extends StatelessWidget {
   final List<String> sectionNames;
   final Function(int) onSectionChanged;
@@ -63,6 +85,16 @@ class AdminDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final FirebaseAuth auth = FirebaseAuth.instance;
+
+    void _signOut() async {
+  try {
+    await auth.signOut();
+    context.go('/');
+  } catch (e) {
+    print("Erreur de déconnexion : $e");
+  }
+}
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -80,17 +112,15 @@ class AdminDrawer extends StatelessWidget {
           ),
           for (int i = 0; i < sectionNames.length; i++)
             buildDrawerItem(sectionNames[i], i),
-          Consumer(
-            builder: (context, ref, child) {
-              return ListTile(
-                title: const Text("Déconnexion"),
-                leading: const Icon(
-                  Icons.logout,
-                  color: Colors.red,
-                ),
-                onTap: () {
-                                },
-              );
+          ListTile(
+            title: const Text("Déconnexion"),
+            leading: const Icon(
+              Icons.logout,
+              color: Colors.red,
+            ),
+            onTap: () {
+              // Gérez la déconnexion ici
+              _signOut();
             },
           ),
         ],
@@ -111,4 +141,5 @@ class AdminDrawer extends StatelessWidget {
       },
     );
   }
+  
 }
