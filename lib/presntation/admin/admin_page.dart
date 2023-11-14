@@ -1,7 +1,7 @@
 
 // Importez également 'NewletterPage' si vous en avez besoin.
 
-import 'package:diarraapp/presntation/admin/addProductPage.dart';
+import 'package:diarraapp/presntation/admin/add_product_page..dart';
 import 'package:diarraapp/presntation/admin/add_category_page.dart';
 import 'package:diarraapp/presntation/admin/commandPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,7 +34,7 @@ class _AdminPageState extends State<AdminPage> {
   int activePageIndex = 0; // Index de la page active
   List<Widget> page = [
   const DashboardPage(),
-  const AddProductPage(),
+   AddProductPage(),
    const AddCategoryPage(),
   const CommandPage(),
  // NewletterPage(),

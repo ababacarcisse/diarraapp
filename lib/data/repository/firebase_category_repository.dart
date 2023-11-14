@@ -12,7 +12,7 @@ class FirebaseCategoryRepository implements CategoryRepository {
   FirebaseCategoryRepository(this.firebaseCategoryDataSource);
 
   @override
-  Future<void> addCategory(Category category) async {
+  Future<void> addCategory(CategoryEntity category) async {
     final categoryModel = category as CategoryModel;
     await firebaseCategoryDataSource.addCategory(categoryModel);
   }

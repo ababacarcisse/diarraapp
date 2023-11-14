@@ -8,7 +8,7 @@ class CategoryInteractor {
   CategoryInteractor(this.categoryRepository);
 
   Future<void> addCategory(String categoryName) async {
-    final newCategory = Category(name: categoryName);
+    final newCategory = CategoryEntity(name: categoryName);
     await categoryRepository.addCategory(newCategory);
   }
 }

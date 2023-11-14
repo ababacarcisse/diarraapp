@@ -23,7 +23,7 @@ class FirebaseCategoryDataSource {
   //obtenir les categories
   Stream<List<CategoryModel>> categories() {
     return categoriesCollection.snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) => CategoryModel.fromEntity(Category(
+      return snapshot.docs.map((doc) => CategoryModel.fromEntity(CategoryEntity(
    id:  doc.id,
         name: doc['name'],
       ))).toList();

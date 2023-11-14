@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../comon/models/categorie_models.dart';
-import '../../providers/provider.dart';
+import '../../providers/providerCategory.dart';
 class AddCategoryPage extends StatefulWidget {
   const AddCategoryPage({Key? key}) : super(key: key);
 
