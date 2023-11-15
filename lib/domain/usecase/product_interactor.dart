@@ -1,27 +1,13 @@
 
-import 'dart:io';
-
-import '../../data/repository/firebase_product_repository.dart';
 import '../entries/product_entitie.dart';
 import '../repositories/productRepositorie.dart';
 
 class ProductInteractor {
-  final ProductRepository productRepository;
+  final ProductRepository _repository;
 
-  ProductInteractor(this.productRepository);
+  ProductInteractor(this._repository);
 
-  Future<void> addProduct(String productTitle,String productDescription,String productPrice,List<String> productImages) async {
-   
-   
-   
-   
-    final newProduct = ProductEntity(
-      title: productTitle,
-      description: productDescription,
-      price: productPrice,
-      imageUrls: productImages,
-    );
-    await productRepository.addProduct(newProduct, productImages);
-    
+  Future<void> addProduct(ProductEntity product) async {
+    await _repository.addProduct(product);
   }
 }

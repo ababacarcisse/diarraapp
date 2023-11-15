@@ -1,4 +1,8 @@
+import 'package:diarraapp/domain/repositories/productRepositorie.dart';
 import 'package:flutter/material.dart';
+import '../../data/repository/firebase_product_repository.dart';
+import '../../domain/usecase/product_interactor.dart';
+import '../../providers/provider_product.dart';
 import 'controllers/add_product_controller.dart';
 
 class AddProductPage extends StatefulWidget {
@@ -16,7 +20,11 @@ class _AddProductPageState extends State<AddProductPage> {
   @override
   void initState() {
     super.initState();
-    _controller = AddProductController();
+  final productRepository = FirebaseProductRepository(); // Utilisez l'implémentation concrète ici
+    final productInteractor = ProductInteractor(productRepository);
+    _controller = AddProductController(productInteractor);
+
+
   }
 
   @override
@@ -44,7 +52,7 @@ class _AddProductPageState extends State<AddProductPage> {
               controller: _titleController,
               decoration: const InputDecoration(labelText: 'Titre'),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             TextField(
               controller: _descriptionController,
               decoration: const InputDecoration(labelText: 'Description'),
@@ -65,7 +73,7 @@ class _AddProductPageState extends State<AddProductPage> {
                   price: double.tryParse(_priceController.text) ?? 0.0,
                 );
               },
-              child: Text('Enregistrer le produit'),
+              child: const Text('Ajouter le produit'),
             ),
           ],
         ),

@@ -1,53 +1,63 @@
-
-
-
-
 import 'dart:io';
 
-import 'package:diarraapp/comon/models/product_models.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:diarraapp/domain/entries/product_entitie.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../domain/repositories/productRepositorie.dart';
-import '../datasource/firebase_product_data_source.dart';
 
 class FirebaseProductRepository implements ProductRepository {
-  final FirebaseProductDataSource firebaseProductDataSource;
-  FirebaseProductRepository(this.firebaseProductDataSource);
-
- @override
- 
-  Future addProduct(ProductModel product, List<File> images) async {
+  
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  //ajouter le produit
+  Future<void> addProduct(ProductEntity product) async {
     try {
-      final List<String> imageUrls = await firebaseProductDataSource.uploadImages(images);
-    final updatedProduct = product.copyWith(imagePaths: imageUrls);      
-      // Enregistrez le produit dans Firestore
-   return   await firebaseProductDataSource.addProduct(updatedProduct);
+      // Téléversez d'abord les images sur Firebase Storage
+      final List<String> imageUrls = await uploadImages(product.imageUrls);
 
+      // Créez un nouvel objet ProductEntity avec les URLs des images téléchargées
+      final updatedProduct = ProductEntity(
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrls: imageUrls,
+      );
+
+      // Maintenant, ajoutez le produit avec les URLs des images à la base de données (Firebase Firestore par exemple)
+      await _firestore.collection('products').add({
+        'title': updatedProduct.title,
+        'description': updatedProduct.description,
+        'price': updatedProduct.price,
+        'imageUrls': updatedProduct.imageUrls,
+      });
     } catch (e) {
-      throw Exception('Erreur lors de l\'ajout du produit : $e');
+      // Gérez les erreurs appropriées ici
+      print("Erreur lors de l'ajout du produit : $e");
+      rethrow; // Vous pouvez gérer différemment selon vos besoins
     }
   }
-  
 
-  
-  @override
-  Stream<List<ProductModel>> getProducts() {
-    //get all products
-    return firebaseProductDataSource.products();
-   
+  Future<List<String>> uploadImages(List<String> imagePaths) async {
+    try {
+      final List<String> imageUrls = [];
+
+      for (var imagePath in imagePaths) {
+        final file = File(imagePath);
+        final fileName = basename(file.path);
+        final storageRef = _storage.ref().child('product_images/${const Uuid().v4()}_$fileName');
+
+        await storageRef.putFile(file);
+        final imageUrl = await storageRef.getDownloadURL();
+        imageUrls.add(imageUrl);
+      }
+
+      return imageUrls;
+    } catch (e) {
+      print("Erreur lors du téléversement des images : $e");
+      rethrow; // Vous pouvez gérer différemment selon vos besoins
+    }
   }
-  
-  @override
-  Future<void> updateProduct(String productId, String title, String description, String price, String images) {
-    //update product
-    return firebaseProductDataSource.updateProduct(productId, title, description, price, images);
-  }
-
-
-
-  @override
-  Future<void> deleteProduct(String productd) async {
-    await firebaseProductDataSource.deleteProduct(productd);
-  }
-
-
 }

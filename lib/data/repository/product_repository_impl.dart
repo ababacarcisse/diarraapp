@@ -1,43 +1,34 @@
 
 
-
-
-import '../../comon/models/product_models.dart';
 import '../../domain/entries/product_entitie.dart';
 import '../../domain/repositories/productRepositorie.dart';
-import '../datasource/product.dart';
+import '../datasource/firebaselocaldatasource.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
-  final ProductLocalDataSource localDataSource;
+  final FirebaseProductDataSource _dataSource;
 
-  ProductRepositoryImpl(this.localDataSource);
+  ProductRepositoryImpl(this._dataSource);
 
-    @override
+  @override
   Future<void> addProduct(ProductEntity product) async {
-    final productModel = product as ProductModel;
-    await localDataSource.addProduct(productModel);
-  }
-  @override
-  Future<void> updateProduct(String productId, String newTitle,
-  String newDescription,
-  String newPrice,String newImages ) async {
-    await localDataSource.updateProduct(productId, 
-    newTitle,
-    newDescription,
-    newPrice,
-    newImages
-    );
-  }
+    try {
+      // Téléversez d'abord les images sur Firebase Storage
+      final List<String> imageUrls = await _dataSource.uploadImages(product.imageUrls);
 
-  @override
-  Future<void> deleteProduct(String productId) async {
-    await localDataSource.deleteProduct(productId);
-  }
+      // Créez un nouvel objet ProductEntity avec les URLs des images téléchargées
+      final updatedProduct = ProductEntity(
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrls: imageUrls,
+      );
 
-  
-  @override
-  Stream<List<ProductModel>> getProducts() {
-    // TODO: implement getProducts
-    return localDataSource.getProducts();
+      // Maintenant, ajoutez le produit avec les URLs des images à la base de données (Firebase Firestore par exemple)
+      await _dataSource.addProduct(updatedProduct);
+    } catch (e) {
+      // Gérez les erreurs appropriées ici
+      print("Erreur lors de l'ajout du produit : $e");
+      rethrow; // Vous pouvez gérer différemment selon vos besoins
+    }
   }
 }

@@ -1,25 +1,43 @@
-// product_providers.dart
-import 'package:diarraapp/data/datasource/firebase_product_data_source.dart';
-import 'package:diarraapp/data/repository/firebase_product_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../comon/models/product_models.dart';
+import '../data/datasource/firebaselocaldatasource.dart';
+import '../data/repository/product_repository_impl.dart';
+import '../domain/entries/product_entitie.dart';
 import '../domain/repositories/productRepositorie.dart';
-import '../domain/usecase/Product_use_case.dart';
 
-// Data sources
-final firebaseProductDataSourceProvider =
-    Provider<FirebaseProductDataSource>((ref) {
-  return FirebaseProductDataSource();
+final productRepositoryProvider = Provider<ProductRepository>(
+  (ref) => ProductRepositoryImpl(
+    FirebaseProductDataSource(),
+  ),
+);
+
+
+final productControllerProvider = StateNotifierProvider<ProductController, AsyncValue<List<ProductModel>>>((ref) {
+  final repository = ref.watch(productRepositoryProvider);
+  return ProductController(repository);
 });
 
-// Repositories
-final productRepositoryProvider = Provider<ProductRepository>((ref) {
-  final firebaseDataSource = ref.watch(firebaseProductDataSourceProvider);
-  return FirebaseProductRepository(firebaseDataSource);
-});
+class ProductController extends StateNotifier<AsyncValue<List<ProductModel>>> {
+  final ProductRepository _repository;
 
-// Use cases
-final productUseCaseProvider = Provider<ProductUseCase>((ref) {
-  final productRepository = ref.watch(productRepositoryProvider);
-  return ProductUseCase(productRepository);
-});
+  ProductController(this._repository) : super(AsyncValue.loading());
+
+Future<void> addProduct(ProductEntity product) async {
+  state = AsyncValue.loading();
+  try {
+    await _repository.addProduct(product);
+    state = AsyncValue.data(
+      [...state.when(data: (data) => data ?? [], loading: () => [], error: (error, _) => []) ?? [], ProductModel(
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrls: product.imageUrls,
+      )]
+    );
+  } catch (e, s) {
+  state = AsyncValue.error(e, s);
+  }
+}
+
+}
