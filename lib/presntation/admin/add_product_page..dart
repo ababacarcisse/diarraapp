@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/repository/firebase_product_repository.dart';
 import 'controllers/add_product_controller.dart';
 
 class AddProductPage extends StatefulWidget {
@@ -18,31 +17,10 @@ class _AddProductPageState extends State<AddProductPage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
-  List<PlatformFile> imageFiles = [];
-
-  Future<void> _pickImages() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-        type: FileType.image,
-      );
-
-      if (result == null) return;
-
-      setState(() {
-        imageFiles = result.files;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Product'),
@@ -54,11 +32,16 @@ class _AddProductPageState extends State<AddProductPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ElevatedButton(
-                onPressed: _pickImages,
+                onPressed: () async {
+                  await _controller.pickImages(context, );
+                  setState(() {
+                  });
+                },
+
                 child: const Text('Sélectionner des photos'),
               ),
               const SizedBox(height: 16),
-        _buildSelectedImage(imageFiles),
+        _buildSelectedImage(),
               const SizedBox(height: 16),
               TextField(
                 controller: _titleController,
@@ -87,14 +70,11 @@ class _AddProductPageState extends State<AddProductPage> {
                 //      List<String> imageUrls = await galleryService.uploadImages(context, imageFiles);
 
                 onPressed: () async{
-                  FirebaseProductRepository galleryService = FirebaseProductRepository();
-                  List<String> imageUrls = await galleryService.uploadImages(context, imageFiles);
                   await _controller.saveProduct(
                     title: _titleController.text,
                     description: _descriptionController.text,
                     price: _priceController.text,
                     category: _categoryController.text,
-                    imageUrls: imageUrls,
                   );
                   Navigator.pop(context);
                 },
@@ -106,14 +86,16 @@ class _AddProductPageState extends State<AddProductPage> {
       ),
     );
   }
-Widget _buildSelectedImage(List<PlatformFile> imageFiles) {
+// ...
+
+Widget _buildSelectedImage() {
   return SizedBox(
     height: 200,
     child: ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: imageFiles.length,
+      itemCount: _controller.imageFiles.length,
       itemBuilder: (context, index) {
-        final imageFile = imageFiles[index];
+        final imageFile = _controller.imageFiles[index];
 
         return Stack(
           children: [
@@ -129,9 +111,8 @@ Widget _buildSelectedImage(List<PlatformFile> imageFiles) {
                 icon: const Icon(Icons.cancel),
                 onPressed: () {
                   // Supprimez l'image de la liste
-                  imageFiles.removeAt(index);
-                  setState(() {
-                  });
+                  _controller.removeImage(index);
+                  setState(() {});
                 },
               ),
             ),
@@ -141,5 +122,7 @@ Widget _buildSelectedImage(List<PlatformFile> imageFiles) {
     ),
   );
 }
+
+// ...
 
 }
