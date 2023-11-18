@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../comon/models/categorie_models.dart';
-import '../../providers/providerCategory.dart';
+import '../providers/providerCategory.dart';
 class AddCategoryPage extends StatefulWidget {
   const AddCategoryPage({Key? key}) : super(key: key);
 
@@ -124,18 +124,18 @@ class CategoryListWidget extends ConsumerWidget {
 
               return ListTile(
                 title: Text(category.name),
-                leading: Icon(Icons.category),
+                leading: const Icon(Icons.category),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.edit),
+                      icon: const Icon(Icons.edit),
                       onPressed: () {
                         // Mettez en œuvre la logique d'édition ici
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () {
                         // Mettez en œuvre la logique de suppression ici
                       },
@@ -147,7 +147,7 @@ class CategoryListWidget extends ConsumerWidget {
           );
         },
         loading: () => const CircularProgressIndicator(),
-        error: (error, stack) => Center(
+        error: (error, stack) => const Center(
           child: Text('Erreur lors du chargement des catégories.'),
         ),
       ),

@@ -34,7 +34,7 @@ class _AdminPageState extends State<AdminPage> {
   int activePageIndex = 0; // Index de la page active
   List<Widget> page = [
   const DashboardPage(),
-   AddProductPage(),
+   const AddProductPage(),
    const AddCategoryPage(),
   const CommandPage(),
  // NewletterPage(),
@@ -87,7 +87,7 @@ class AdminDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
         final FirebaseAuth auth = FirebaseAuth.instance;
 
-    void _signOut() async {
+    void signOut() async {
   try {
     await auth.signOut();
     context.go('/');
@@ -120,7 +120,7 @@ class AdminDrawer extends StatelessWidget {
             ),
             onTap: () {
               // Gérez la déconnexion ici
-              _signOut();
+              signOut();
             },
           ),
         ],

@@ -4,6 +4,7 @@ import '../../domain/entries/categorie_entitie.dart';
 class CategoryModel extends CategoryEntity {
   @override
   final String name;
+  @override
   final String? id;
   const CategoryModel({required this.id ,required this.name,}) : super(name: name);
 

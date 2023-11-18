@@ -3,9 +3,9 @@
 import 'package:diarraapp/data/repository/firebase_category_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/datasource/firebase_category_data_source.dart';
-import '../domain/repositories/categorieRepositorie.dart';
-import '../domain/usecase/category_use_case.dart';
+import '../../data/datasource/firebase_category_data_source.dart';
+import '../../domain/repositories/categorieRepositorie.dart';
+import '../../domain/usecase/category/category_use_case.dart';
 
 // Data sources
 final firebaseCategoryDataSourceProvider = Provider<FirebaseCategoryDataSource>((ref) {

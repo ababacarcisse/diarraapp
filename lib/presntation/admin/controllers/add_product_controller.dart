@@ -1,39 +1,35 @@
-import 'package:image_picker/image_picker.dart';
 
+
+import '../../../data/repository/firebase_product_repository.dart';
 import '../../../domain/entries/product_entitie.dart';
-import '../../../domain/usecase/product_interactor.dart';
+import '../../../domain/usecase/product/create_product_use_case.dart';
+
 class AddProductController {
-  final ProductInteractor _productInteractor;
-
-  AddProductController(this._productInteractor);
-List<String> _selectedImages = [];
-
-  Future<void> pickImages() async {
-    final result = await ImagePicker().pickMultiImage();
-    if (result != null) {
-      _selectedImages = result.map((file) => file.path).toList();
-    }
-  }
- Future<List<String>> getImagePaths() async {
-    return _selectedImages;
-  }
-
-  void removeImage(String path) {
-    _selectedImages.remove(path);
-  }
+  CreateProductUseCase createProductUseCase = CreateProductUseCase(
+    FirebaseProductRepository(),
+  );
 
   Future<void> saveProduct({
     required String title,
     required String description,
-    required double price,
+    required String price,
+    required String category,
+    required List<String> imageUrls,
   }) async {
-    final product = ProductEntity(
-      
-      title: title,
-      description: description,
-      price: price,
-      imageUrls: _selectedImages,
-    );
-    await _productInteractor.addProduct(product);
+    try {
+      Product product = Product(
+        id: '',
+        title: title,
+        description: description,
+        price: price,
+        category: category,
+        imageUrls: imageUrls,
+      );
+
+      await createProductUseCase.execute(product);
+    } catch (e) {
+      print("Erreur lors de la création du produit : $e");
+      rethrow;
+    }
   }
 }

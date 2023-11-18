@@ -46,12 +46,12 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                       const SizedBox(height: 20),
                       TextField(
                         controller: emailController,
-                        decoration: InputDecoration(labelText: 'Email'),
+                        decoration: const InputDecoration(labelText: 'Email'),
                       ),
                       const SizedBox(height: 10),
                       TextField(
                         controller: passwordController,
-                        decoration: InputDecoration(labelText: 'Password'),
+                        decoration: const InputDecoration(labelText: 'Password'),
                         obscureText: true,
                       ),
                       const SizedBox(height: 20),
@@ -59,7 +59,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                 bool isLoading = ref.watch(authNotifierProvider);
                 return Column(
                   children: [
-                    isLoading ? CircularProgressIndicator() : ElevatedButton(
+                    isLoading ? const CircularProgressIndicator() : ElevatedButton(
                       onPressed: () {
                         ref.read(authNotifierProvider.notifier).login(
                           email: emailController.text,

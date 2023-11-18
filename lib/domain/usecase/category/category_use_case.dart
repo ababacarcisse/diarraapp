@@ -1,6 +1,6 @@
 
-import '../../comon/models/categorie_models.dart';
-import '../repositories/categorieRepositorie.dart';
+import '../../../comon/models/categorie_models.dart';
+import '../../repositories/categorieRepositorie.dart';
 
 class CategoryUseCase {
   final CategoryRepository categoryRepository;
