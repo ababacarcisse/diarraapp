@@ -2,32 +2,44 @@ import 'dart:typed_data';
 import 'package:diarraapp/presntation/admin/widget/productList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import 'controllers/add_product_controller.dart';
+import 'controllers/editController.dart';
 
-class AddProductPage extends ConsumerStatefulWidget {
-  const AddProductPage({Key? key}) : super(key: key);
+class EditProductPage extends ConsumerStatefulWidget {
+  final String productId;
+  final String title;
+  final String description;
+  // Ajoutez d'autres champs du produit ici
+
+  const EditProductPage({
+    Key? key,
+    required this.productId,
+    required this.title,
+    required this.description,
+    // Ajoutez d'autres champs du produit ici
+  }) : super(key: key);
 
   @override
-  _AddProductPageState createState() => _AddProductPageState();
+  _EditProductPageState createState() => _EditProductPageState();
 }
 
-class _AddProductPageState extends ConsumerState<AddProductPage> {
+class _EditProductPageState extends ConsumerState<EditProductPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   String selectedCategory = ""; // Nouvelle variable pour stocker la catégorie sélectionnée
 
-   final AddProductController _controller =AddProductController();
+   final EditProductController _controller =EditProductController();
 
   @override
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Product'),
+        title: const Text('Edit Product'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -35,7 +47,7 @@ class _AddProductPageState extends ConsumerState<AddProductPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-           
+              Text(widget.title),
               ElevatedButton(
                 onPressed: () async {
                   await _controller.pickImages(context);
@@ -68,7 +80,7 @@ class _AddProductPageState extends ConsumerState<AddProductPage> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
-                  await _controller.saveProduct(
+                  await _controller.updateProduct(
                     title: _titleController.text,
                     description: _descriptionController.text,
                     price: _priceController.text,

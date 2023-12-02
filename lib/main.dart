@@ -1,3 +1,5 @@
+import 'package:diarraapp/domain/entries/product_entitie.dart';
+import 'package:diarraapp/firebase_options.dart';
 import 'package:diarraapp/presntation/admin/admin_page.dart';
 import 'package:diarraapp/presntation/admin/login/ui/login_ui.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+
+import 'presntation/admin/editproductPage.dart';
 void main() async {
   usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +43,26 @@ class MyApp extends StatelessWidget {
       builder: (context, state) => const AdminPage(),
     ),
    
+      GoRoute(
+  path: '/adminPage/editproduct/:title',
+  builder: (context, state) {
+    Product product=state.extra! as Product;
+    // Récupérez les paramètres
+    final productId = state.pathParameters['productId']?[0];
+    final title = state.pathParameters['title']?[0];
+    final description = state.pathParameters['description']?[0];
+    // Extraire d'autres données du produit ici
+
+    // Passez ces données à votre page d'édition
+    return EditProductPage(
+      productId: productId!,
+      title: title!,
+      description: description!,
+      // Passez d'autres données du produit ici
+    );
+  },
+),
+
   ]);
   return MaterialApp.router(
     routerConfig: router,

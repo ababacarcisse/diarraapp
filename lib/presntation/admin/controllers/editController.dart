@@ -2,15 +2,16 @@ import 'dart:typed_data';
 
 import 'package:diarraapp/data/repository/firebase_product_repository.dart';
 import 'package:diarraapp/domain/entries/product_entitie.dart';
-import 'package:diarraapp/domain/usecase/product/create_product_use_case.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
+import '../../../domain/usecase/product/update_product_usecase.dart';
 
-class AddProductController {
- // Utilisez le constructeur pour ing   itialiser createProductUseCase
- final CreateProductUseCase createProductUseCase=CreateProductUseCase(FirebaseProductRepository());
+
+class EditProductController {
+ // Utilisez le constructeur pour ing   itialiser updateProductUseCase
+ final UpdateProductUseCase updateProductUseCase=UpdateProductUseCase(FirebaseProductRepository());
   List<PlatformFile> imageFiles = [];
   Future<void> pickImages(BuildContext context) async {
     try {
@@ -63,7 +64,7 @@ class AddProductController {
     }
   }
 
-  Future<void> saveProduct({
+  Future<void> updateProduct({
     required String title,
     required String description,
     required String price,
@@ -79,7 +80,7 @@ class AddProductController {
       price: price,
       imageUrls: imageUrls, id: '', category: category,
     );
-        await   createProductUseCase.execute(product);
+        await   updateProductUseCase.execute(product);
 
    } catch (e) {
       print("Erreur lors de la création du produit : $e");
