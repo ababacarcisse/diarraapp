@@ -6,7 +6,7 @@ import '../entries/product_entitie.dart';
 
 //  interface ProductRepository avec des méthodes pour effectuer les opérations CRUD
 abstract class ProductRepository {
-  Future<void> createProduct(Product product, );
+  Future<void> createProduct(Product product);
   Future<Product?> getProductById(String productId);
   Future<List<Product>> getAllProducts();
   Future<void> updateProduct(Product product);

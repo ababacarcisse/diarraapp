@@ -9,7 +9,8 @@ class CreateProductUseCase {
 
   CreateProductUseCase(this._productRepository);
 
-  Future<void> execute(Product product ) async {
-    await _productRepository.createProduct(product );
+  Future<void> execute(Product product) async {
+    await _productRepository.createProduct(product);
   }
 }
+

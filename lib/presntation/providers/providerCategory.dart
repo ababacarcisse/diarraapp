@@ -1,5 +1,6 @@
 
 
+import 'package:diarraapp/comon/models/categorie_models.dart';
 import 'package:diarraapp/data/repository/firebase_category_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,3 +27,8 @@ final categoryUseCaseProvider = Provider<CategoryUseCase>((ref) {
   final categoryRepository = ref.read(categoryRepositoryProvider);
   return CategoryUseCase(categoryRepository);
 });
+//affiche les catégories
+final categoryListProvider = StreamProvider<List<CategoryModel>>((ref) {
+  final categoryRepository = ref.watch(categoryRepositoryProvider);
+  return categoryRepository.getCategories();
+}); 

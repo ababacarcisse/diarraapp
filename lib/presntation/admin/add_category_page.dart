@@ -99,10 +99,7 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
 }
 //affichév les categories
 
-final categoryListProvider = StreamProvider<List<CategoryModel>>((ref) {
-  final categoryRepository = ref.watch(categoryRepositoryProvider);
-  return categoryRepository.getCategories();
-});
+
 
 class CategoryListWidget extends ConsumerWidget {
   const CategoryListWidget({super.key});
