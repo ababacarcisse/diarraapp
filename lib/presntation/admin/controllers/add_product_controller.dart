@@ -71,7 +71,6 @@ class AddProductController {
   }) async {
     try {
       List<String> imageUrls = await uploadImages(imageFiles);
-      // Reste du code...
     
     final product = Product(
       title: title,
