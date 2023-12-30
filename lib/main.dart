@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
   ]);
   return MaterialApp.router(
     routerConfig: router,
-    title: 'Diarra',
+    title: 'DiarraAPP',
     theme: ThemeData(
       primarySwatch: Colors.blue,
     ),
